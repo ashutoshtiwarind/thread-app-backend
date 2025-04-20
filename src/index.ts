@@ -11,8 +11,18 @@ async function init () {
     app.use(express.json());
 
     const gqlServer = new ApolloServer({
-      typeDefs: "",
-      resolvers: {},
+      typeDefs: `
+      type Query {
+        hello: String
+        say(name: String): String
+      }
+      `,
+      resolvers: {
+        Query: {
+          hello: () => `hey how are you`,
+          say: (_, {name}: {name: string}) => `hey ${name}`
+        }
+      },
     });
     
     await gqlServer.start();
